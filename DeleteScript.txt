@@ -1,0 +1,11 @@
+//PowerShell Script to delete files more than X days old
+
+$Folder = "/*Address of files to delete from*/"
+
+#Delete files older than 6 months
+Get-ChildItem $Folder -Recurse -Force -ea 0 |
+? {!$_.PsIsContainer -and $_.LastWriteTime -lt (Get-Date).AddDays(-7)} |
+ForEach-Object {
+   $_ | del -Force
+   $_.FullName | Out-File /*Address of where to put delete log of items deleted*/\deletedlog.txt -Append
+}
